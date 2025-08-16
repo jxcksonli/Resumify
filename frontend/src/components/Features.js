@@ -15,7 +15,7 @@ import {
   FaCog
 } from 'react-icons/fa';
 
-const Features = () => {
+const Features = ({ setActiveTab }) => {
   const features = [
     {
       icon: <FaRocket />,
@@ -132,8 +132,8 @@ const Features = () => {
         <h2>Ready to Create Your Perfect Resume?</h2>
         <p>Join thousands of professionals who trust Resumify for their career success</p>
         <div className="cta-buttons">
-          <button className="cta-primary">Get Started Now</button>
-          <button className="cta-secondary">View Templates</button>
+          <button className="cta-primary" onClick={() => setActiveTab('edit')}>Get Started Now</button>
+          <button className="cta-secondary" onClick={() => setActiveTab('templates')}>View Templates</button>
         </div>
       </div>
     </div>

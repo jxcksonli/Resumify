@@ -278,55 +278,6 @@
   line-height: 1.4;
 }
 
-.upload-features {
-  margin-top: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: var(--glass-light);
-  backdrop-filter: blur(15px);
-  border-radius: 16px;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.1);
-  transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-  background: var(--glass-medium);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px rgba(31, 38, 135, 0.15),
-    0 0 20px rgba(0, 212, 255, 0.1);
-}
-
-.feature-icon {
-  color: var(--aqua-primary);
-  font-size: 1.5rem;
-  margin-top: 0.25rem;
-  filter: drop-shadow(0 1px 3px rgba(0, 212, 255, 0.3));
-}
-
-.feature-item h5 {
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  font-family: 'Poppins', sans-serif;
-}
-
-.feature-item p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin: 0;
-}
 
 @media (max-width: 768px) {
   .upload-zone {
@@ -348,15 +299,6 @@
   
   .file-type {
     padding: 0.75rem;
-  }
-  
-  .upload-features {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .feature-item {
-    padding: 1rem;
   }
   
   .upload-icon {

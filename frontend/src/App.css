@@ -128,6 +128,12 @@
 }
 
 .content-area {
+  min-height: 600px;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+}
+
+.content-area.with-background {
   background: var(--glass-white);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
@@ -137,13 +143,10 @@
     0 8px 32px rgba(31, 38, 135, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
   padding: 2.5rem;
-  min-height: 600px;
-  animation: fadeIn 0.5s ease;
-  position: relative;
   overflow: hidden;
 }
 
-.content-area::before {
+.content-area.with-background::before {
   content: '';
   position: absolute;
   top: 0;
@@ -158,7 +161,7 @@
   animation: shimmer 3s infinite;
 }
 
-.content-area::after {
+.content-area.with-background::after {
   content: '';
   position: absolute;
   top: 0;

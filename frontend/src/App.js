@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import Home from './components/Home';
 import ResumeForm from './components/ResumeForm';
 import Preview from './components/Preview';
 import Features from './components/Features';
@@ -20,7 +21,7 @@ function App() {
     achievements: []
   });
 
-  const [activeTab, setActiveTab] = useState('edit');
+  const [activeTab, setActiveTab] = useState('home');
 
   const handleTemplateSelect = (templateData) => {
     setResumeData(templateData);
@@ -32,6 +33,12 @@ function App() {
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="app-container">
         <div className="tab-navigation">
+          <button 
+            className={`tab-button ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveTab('home')}
+          >
+            Home
+          </button>
           <button 
             className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
             onClick={() => setActiveTab('edit')}
@@ -64,7 +71,10 @@ function App() {
           </button>
         </div>
         
-        <div className="content-area">
+        <div className={`content-area ${activeTab !== 'home' ? 'with-background' : ''}`}>
+          {activeTab === 'home' && (
+            <Home setActiveTab={setActiveTab} />
+          )}
           {activeTab === 'edit' && (
             <ResumeForm resumeData={resumeData} setResumeData={setResumeData} />
           )}
@@ -72,7 +82,7 @@ function App() {
             <Preview resumeData={resumeData} />
           )}
           {activeTab === 'features' && (
-            <Features />
+            <Features setActiveTab={setActiveTab} />
           )}
           {activeTab === 'templates' && (
             <Templates onTemplateSelect={handleTemplateSelect} />

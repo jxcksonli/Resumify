@@ -68,6 +68,9 @@ const ResumeUpload = ({ onResumeDataExtracted }) => {
       });
 
       if (!response.ok) {
+        if (response.status === 0 || !response.status) {
+          throw new Error('Backend server not running. Please start the backend server first.');
+        }
         throw new Error(`Upload failed: ${response.statusText}`);
       }
 
@@ -86,9 +89,17 @@ const ResumeUpload = ({ onResumeDataExtracted }) => {
       }
     } catch (error) {
       console.error('Upload error:', error);
+      let errorMessage = 'Unable to read document. Please try again or fill manually.';
+      
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        errorMessage = 'Cannot connect to backend server. Please ensure the backend is running on port 5000.';
+      } else if (error.message && !error.message.includes('not found') && !error.message.includes('404')) {
+        errorMessage = error.message;
+      }
+      
       setUploadStatus({
         type: 'error',
-        message: error.message || 'Failed to parse resume. Please try again or fill manually.'
+        message: errorMessage
       });
     } finally {
       setUploading(false);
@@ -158,30 +169,6 @@ const ResumeUpload = ({ onResumeDataExtracted }) => {
           <p>{uploadStatus.message}</p>
         </div>
       )}
-
-      <div className="upload-features">
-        <div className="feature-item">
-          <FaCheckCircle className="feature-icon" />
-          <div>
-            <h5>Smart Extraction</h5>
-            <p>Automatically extracts education, experience, skills, and contact information</p>
-          </div>
-        </div>
-        <div className="feature-item">
-          <FaCheckCircle className="feature-icon" />
-          <div>
-            <h5>Professional Rebranding</h5>
-            <p>Transforms your resume into a clean, modern LaTeX format</p>
-          </div>
-        </div>
-        <div className="feature-item">
-          <FaCheckCircle className="feature-icon" />
-          <div>
-            <h5>Easy Editing</h5>
-            <p>Review and enhance the auto-filled information before generating PDF</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
