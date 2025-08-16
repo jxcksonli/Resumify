@@ -11,10 +11,11 @@ const Preview = ({ resumeData }) => {
   const handleCompile = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/compile', {
+      const response = await axios.post('http://localhost:5001/api/compile', {
         resumeData
       }, {
-        responseType: 'blob'
+        responseType: 'blob',
+        timeout: 30000 // 30 second timeout
       });
       
       const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -28,7 +29,13 @@ const Preview = ({ resumeData }) => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error compiling resume:', error);
-      alert('Failed to compile resume. Please ensure LaTeX is installed on the server.');
+      if (error.code === 'ECONNABORTED') {
+        alert('Compilation timed out. The server might be busy or LaTeX installation issues.');
+      } else if (error.message.includes('Network Error')) {
+        alert('Cannot connect to server. Make sure the backend is running on port 5001.');
+      } else {
+        alert('Failed to compile resume. Check console for details.');
+      }
     } finally {
       setLoading(false);
     }
@@ -37,8 +44,10 @@ const Preview = ({ resumeData }) => {
   const handleViewLatex = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/latex', {
+      const response = await axios.post('http://localhost:5001/api/latex', {
         resumeData
+      }, {
+        timeout: 15000 // 15 second timeout
       });
       setLatexCode(response.data.latex);
       setShowLatex(true);

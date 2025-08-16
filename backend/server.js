@@ -220,6 +220,44 @@ const parseResumeText = (text) => {
   };
 };
 
+// Function to escape special LaTeX characters and fix Unicode issues
+const escapeLatex = (text) => {
+  if (!text) return '';
+  
+  // Convert to string if not already
+  text = String(text);
+  
+  // Replace problematic Unicode characters
+  text = text
+    // Smart quotes and apostrophes
+    .replace(/[\u2018\u2019]/g, "'")  // Smart single quotes
+    .replace(/[\u201C\u201D]/g, '"')  // Smart double quotes
+    .replace(/[\u2013]/g, '-')         // En dash
+    .replace(/[\u2014]/g, '--')        // Em dash
+    .replace(/[\u2026]/g, '...')      // Ellipsis
+    // Ligatures
+    .replace(/[\uFB00]/g, 'ff')       // ff ligature
+    .replace(/[\uFB01]/g, 'fi')       // fi ligature  
+    .replace(/[\uFB02]/g, 'fl')       // fl ligature
+    .replace(/[\uFB03]/g, 'ffi')      // ffi ligature
+    .replace(/[\uFB04]/g, 'ffl')      // ffl ligature
+    // Remove any other non-ASCII characters
+    .replace(/[\uE000-\uF8FF]/g, '')  // Private use area characters
+    .replace(/[^\x00-\x7F]/g, '')     // Remove all non-ASCII
+    // Escape LaTeX special characters
+    .replace(/\\/g, '\\textbackslash ')
+    .replace(/[{}]/g, '\\$&')
+    .replace(/\$/g, '\\$')
+    .replace(/%/g, '\\%')
+    .replace(/&/g, '\\&')
+    .replace(/#/g, '\\#')
+    .replace(/_/g, '\\_')
+    .replace(/\^/g, '\\^{}')
+    .replace(/~/g, '\\~{}');
+    
+  return text;
+};
+
 const generateLatexTemplate = (resumeData) => {
   const {
     name = 'Your Name',
@@ -235,106 +273,80 @@ const generateLatexTemplate = (resumeData) => {
 
   const educationSection = education.length > 0 ? `
 \\section{Education}
-  \\resumeSubHeadingListStart
-    ${education.map(edu => {
-      // Process details - split by newlines if it's a single string
-      let processedDetails = [];
-      if (edu.details) {
-        if (typeof edu.details === 'string') {
-          // Split by newlines and filter out empty lines
-          processedDetails = edu.details.split('\n').filter(line => line.trim());
-        } else if (Array.isArray(edu.details)) {
-          // If already an array, use as is
-          processedDetails = edu.details;
-        }
-      }
-      
-      return `
-    \\resumeSubheading
-      {${edu.institution || 'Institution'}}{${edu.location || 'Location'}}
-      {${edu.degree || 'Degree'}}{${edu.dates || 'Dates'}}
-      ${processedDetails.length > 0 ? `
-      \\resumeItemListStart
-        ${processedDetails.map(detail => `\\resumeItem{${detail.trim()}}`).join('\n        ')}
-      \\resumeItemListEnd` : ''}
-    `;
-    }).join('')}
-  \\resumeSubHeadingListEnd
+${education.map(edu => {
+  // Process details - split by newlines if it's a single string
+  let processedDetails = [];
+  if (edu.details) {
+    if (typeof edu.details === 'string') {
+      // Split by newlines and filter out empty lines
+      processedDetails = edu.details.split('\n').filter(line => line.trim());
+    } else if (Array.isArray(edu.details)) {
+      // If already an array, use as is
+      processedDetails = edu.details;
+    }
+  }
+  
+  return `\\resumeSubheading
+    {${escapeLatex(edu.institution || 'Institution')}}{${escapeLatex(edu.location || 'Location')}}
+    {${escapeLatex(edu.degree || 'Degree')}}{${escapeLatex(edu.dates || 'Dates')}}
+    ${processedDetails.length > 0 ? processedDetails.map(detail => `\\\\${escapeLatex(detail.trim())}`).join('') : ''}
+`;
+}).join('')}
 ` : '';
 
   const experienceSection = experience.length > 0 ? `
 \\section{Experience}
-  \\resumeSubHeadingListStart
-    ${experience.map(exp => {
-      // Process details - split by newlines if it's a single string
-      let processedDetails = [];
-      if (exp.details) {
-        if (typeof exp.details === 'string') {
-          // Split by newlines and filter out empty lines
-          processedDetails = exp.details.split('\n').filter(line => line.trim());
-        } else if (Array.isArray(exp.details)) {
-          // If already an array, use as is
-          processedDetails = exp.details;
-        }
-      }
-      
-      return `
-    \\resumeSubheading
-      {${exp.title || 'Job Title'}}{${exp.dates || 'Dates'}}
-      {${exp.company || 'Company'}}{${exp.location || 'Location'}}
-      ${processedDetails.length > 0 ? `
-      \\resumeItemListStart
-        ${processedDetails.map(detail => `\\resumeItem{${detail.trim()}}`).join('\n        ')}
-      \\resumeItemListEnd` : ''}
-    `;
-    }).join('')}
-  \\resumeSubHeadingListEnd
+${experience.map(exp => {
+  // Process details - split by newlines if it's a single string
+  let processedDetails = [];
+  if (exp.details) {
+    if (typeof exp.details === 'string') {
+      // Split by newlines and filter out empty lines
+      processedDetails = exp.details.split('\n').filter(line => line.trim());
+    } else if (Array.isArray(exp.details)) {
+      // If already an array, use as is
+      processedDetails = exp.details;
+    }
+  }
+  
+  return `\\resumeSubheading
+    {${escapeLatex(exp.title || 'Job Title')}}{${escapeLatex(exp.dates || 'Dates')}}
+    {${escapeLatex(exp.company || 'Company')}}{${escapeLatex(exp.location || 'Location')}}
+    ${processedDetails.length > 0 ? processedDetails.map(detail => `\\\\• ${escapeLatex(detail.trim())}`).join('') : ''}
+`;
+}).join('')}
 ` : '';
 
   const skillsSection = skills.length > 0 ? `
 \\section{Skills}
- \\begin{itemize}[leftmargin=0.15in, label={}]
-    \\small{\\item{
-     ${skills.map(skill => `\\textbf{${skill.category}}{: ${skill.items}}`).join(' \\\\\n     ')}
-    }}
- \\end{itemize}
+${skills.map(skill => `\\textbf{${escapeLatex(skill.category)}}: ${escapeLatex(skill.items)}\\\\`).join('\n')}
 ` : '';
 
   const projectsSection = projects.length > 0 ? `
 \\section{Projects}
-    \\resumeSubHeadingListStart
-      ${projects.map(proj => {
-        // Process details - split by newlines if it's a single string
-        let processedDetails = [];
-        if (proj.details) {
-          if (typeof proj.details === 'string') {
-            // Split by newlines and filter out empty lines
-            processedDetails = proj.details.split('\n').filter(line => line.trim());
-          } else if (Array.isArray(proj.details)) {
-            // If already an array, use as is
-            processedDetails = proj.details;
-          }
-        }
-        
-        return `
-      \\resumeProjectHeading
-          {\\textbf{${proj.name || 'Project Name'}} $|$ \\emph{${proj.technologies || 'Technologies'}}}{${proj.dates || 'Dates'}}
-          ${processedDetails.length > 0 ? `
-          \\resumeItemListStart
-            ${processedDetails.map(detail => `\\resumeItem{${detail.trim()}}`).join('\n            ')}
-          \\resumeItemListEnd` : ''}
-      `;
-      }).join('')}
-    \\resumeSubHeadingListEnd
+${projects.map(proj => {
+  // Process details - split by newlines if it's a single string
+  let processedDetails = [];
+  if (proj.details) {
+    if (typeof proj.details === 'string') {
+      // Split by newlines and filter out empty lines
+      processedDetails = proj.details.split('\n').filter(line => line.trim());
+    } else if (Array.isArray(proj.details)) {
+      // If already an array, use as is
+      processedDetails = proj.details;
+    }
+  }
+  
+  return `\\resumeProjectHeading
+    {\\textbf{${escapeLatex(proj.name || 'Project Name')}} | ${escapeLatex(proj.technologies || 'Technologies')}}{${escapeLatex(proj.dates || 'Dates')}}
+    ${processedDetails.length > 0 ? processedDetails.map(detail => `\\\\• ${escapeLatex(detail.trim())}`).join('') : ''}
+`;
+}).join('')}
 ` : '';
 
   const achievementsSection = achievements.length > 0 ? `
 \\section{Achievements}
- \\begin{itemize}[leftmargin=0.15in, label={}]
-    \\small{\\item{
-     ${achievements.map(ach => `\\textbf{${ach}}`).join(' \\\\\n     ')}
-    }}
- \\end{itemize}
+${achievements.filter(ach => ach.trim()).map(ach => `• ${escapeLatex(ach)}\\\\`).join('\n')}
 ` : '';
 
   return `%-------------------------
@@ -344,87 +356,48 @@ const generateLatexTemplate = (resumeData) => {
 
 \\documentclass[letterpaper,11pt]{article}
 
-\\usepackage{latexsym}
-\\usepackage[empty]{fullpage}
-\\usepackage{titlesec}
-\\usepackage{marvosym}
-\\usepackage[usenames,dvipsnames]{color}
-\\usepackage{verbatim}
-\\usepackage{enumitem}
-\\usepackage[hidelinks]{hyperref}
-\\usepackage{fancyhdr}
-\\usepackage[english]{babel}
+\\usepackage[margin=1in]{geometry}
 \\usepackage{tabularx}
-\\input{glyphtounicode}
-
-\\pagestyle{fancy}
-\\fancyhf{}
-\\fancyfoot{}
-\\renewcommand{\\headrulewidth}{0pt}
-\\renewcommand{\\footrulewidth}{0pt}
-
-\\addtolength{\\oddsidemargin}{-0.5in}
-\\addtolength{\\evensidemargin}{-0.5in}
-\\addtolength{\\textwidth}{1in}
-\\addtolength{\\topmargin}{-.5in}
-\\addtolength{\\textheight}{1.0in}
-
-\\urlstyle{same}
 
 \\raggedbottom
 \\raggedright
 \\setlength{\\tabcolsep}{0in}
 
-\\titleformat{\\section}{
-  \\vspace{-4pt}\\scshape\\raggedright\\large
-}{}{0em}{}[\\color{black}\\titlerule \\vspace{-5pt}]
-
-\\pdfgentounicode=1
-
-\\newcommand{\\resumeItem}[1]{
-  \\item\\small{
-    {#1 \\vspace{-2pt}}
-  }
+% Simple section formatting
+\\renewcommand{\\section}[1]{
+  \\vspace{10pt}
+  \\textbf{\\large \\uppercase{#1}}
+  \\vspace{5pt}
+  \\hrule
+  \\vspace{10pt}
 }
 
+% Simple commands without enumitem package
 \\newcommand{\\resumeSubheading}[4]{
-  \\vspace{-2pt}\\item
-    \\begin{tabular*}{0.97\\textwidth}[t]{l@{\\extracolsep{\\fill}}r}
-      \\textbf{#1} & #2 \\\\
-      \\textit{\\small#3} & \\textit{\\small #4} \\\\
-    \\end{tabular*}\\vspace{-7pt}
-}
-
-\\newcommand{\\resumeSubSubheading}[2]{
-    \\item
-    \\begin{tabular*}{0.97\\textwidth}{l@{\\extracolsep{\\fill}}r}
-      \\textit{\\small#1} & \\textit{\\small #2} \\\\
-    \\end{tabular*}\\vspace{-7pt}
+  \\vspace{5pt}
+  \\begin{tabular*}{\\textwidth}{l@{\\extracolsep{\\fill}}r}
+    \\textbf{#1} & #2 \\\\
+    \\textit{#3} & \\textit{#4} \\\\
+  \\end{tabular*}
+  \\vspace{5pt}
 }
 
 \\newcommand{\\resumeProjectHeading}[2]{
-    \\item
-    \\begin{tabular*}{0.97\\textwidth}{l@{\\extracolsep{\\fill}}r}
-      \\small#1 & #2 \\\\
-    \\end{tabular*}\\vspace{-7pt}
+  \\vspace{5pt}
+  \\begin{tabular*}{\\textwidth}{l@{\\extracolsep{\\fill}}r}
+    \\textbf{#1} & #2 \\\\
+  \\end{tabular*}
+  \\vspace{5pt}
 }
-
-\\newcommand{\\resumeSubItem}[1]{\\resumeItem{#1}\\vspace{-4pt}}
-
-\\renewcommand\\labelitemii{$\\vcenter{\\hbox{\\tiny$\\bullet$}}$}
-
-\\newcommand{\\resumeSubHeadingListStart}{\\begin{itemize}[leftmargin=0.15in, label={}]}
-\\newcommand{\\resumeSubHeadingListEnd}{\\end{itemize}}
-\\newcommand{\\resumeItemListStart}{\\begin{itemize}}
-\\newcommand{\\resumeItemListEnd}{\\end{itemize}\\vspace{-5pt}}
 
 \\begin{document}
 
 \\begin{center}
-    \\textbf{\\Huge \\scshape ${name}} \\\\ \\vspace{1pt}
-    \\small ${phone} $|$ \\href{mailto:${email}}{\\underline{${email}}} $|$ 
-    \\href{https://${linkedin}}{\\underline{${linkedin}}}
+    \\textbf{\\Large ${escapeLatex(name)}} \\\\
+    \\vspace{10pt}
+    ${escapeLatex(phone)} | ${escapeLatex(email)} | ${escapeLatex(linkedin)}
 \\end{center}
+\\vspace{20pt}
 
 ${educationSection}
 ${experienceSection}
@@ -449,10 +422,12 @@ app.post('/api/compile', async (req, res) => {
     
     await fs.writeFile(texFile, latexContent);
     
-    exec(`pdflatex -output-directory="${sessionDir}" "${texFile}"`, (error, stdout, stderr) => {
+    exec(`pdflatex -interaction=nonstopmode -output-directory="${sessionDir}" "${texFile}"`, { timeout: 30000 }, (error, stdout, stderr) => {
       if (error) {
         console.error('LaTeX compilation error:', error);
-        return res.status(500).json({ error: 'Failed to compile LaTeX', details: stderr });
+        console.error('stdout:', stdout);
+        console.error('stderr:', stderr);
+        return res.status(500).json({ error: 'Failed to compile LaTeX', details: stderr || error.message });
       }
       
       fs.readFile(pdfFile, (err, data) => {
