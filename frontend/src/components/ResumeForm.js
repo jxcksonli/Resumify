@@ -1,10 +1,15 @@
 import React from 'react';
 import './ResumeForm.css';
 import { FaPlus, FaTrash, FaGripVertical } from 'react-icons/fa';
+import ResumeUpload from './ResumeUpload';
 
 const ResumeForm = ({ resumeData, setResumeData }) => {
   const handleInputChange = (field, value) => {
     setResumeData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleResumeDataExtracted = (extractedData) => {
+    setResumeData(extractedData);
   };
 
   const addEducation = () => {
@@ -145,6 +150,8 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
 
   return (
     <div className="resume-form">
+      <ResumeUpload onResumeDataExtracted={handleResumeDataExtracted} />
+      
       <section className="form-section">
         <h2 className="section-title">Personal Information</h2>
         <div className="form-grid">
