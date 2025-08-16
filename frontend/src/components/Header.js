@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ activeTab, setActiveTab }) => {
   return (
     <header className="header">
       <div className="header-content">
@@ -10,9 +10,24 @@ const Header = () => {
           <span className="tagline">Professional LaTeX Resume Generator</span>
         </div>
         <nav className="nav-links">
-          <a href="#features" className="nav-link">Features</a>
-          <a href="#templates" className="nav-link">Templates</a>
-          <a href="#help" className="nav-link">Help</a>
+          <button 
+            className={`nav-link ${activeTab === 'features' ? 'active' : ''}`}
+            onClick={() => setActiveTab('features')}
+          >
+            Features
+          </button>
+          <button 
+            className={`nav-link ${activeTab === 'templates' ? 'active' : ''}`}
+            onClick={() => setActiveTab('templates')}
+          >
+            Templates
+          </button>
+          <button 
+            className={`nav-link ${activeTab === 'help' ? 'active' : ''}`}
+            onClick={() => setActiveTab('help')}
+          >
+            Help
+          </button>
         </nav>
       </div>
     </header>

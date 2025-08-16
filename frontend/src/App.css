@@ -7,60 +7,118 @@
 .app-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2rem;
   width: 100%;
   flex: 1;
 }
 
 .tab-navigation {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 0;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .tab-button {
-  padding: 1rem 2rem;
-  background: transparent;
-  border: none;
+  padding: 1.2rem 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
   color: var(--text-secondary);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
-  border-radius: 8px 8px 0 0;
+  transition: all 0.4s ease;
+  border-radius: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  overflow: hidden;
+}
+
+.tab-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
 }
 
 .tab-button:hover {
-  color: var(--royal-blue);
-  background: rgba(245, 230, 211, 0.3);
+  color: var(--accent-cyan);
+  background: rgba(72, 219, 251, 0.1);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(72, 219, 251, 0.3);
+}
+
+.tab-button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .tab-button.active {
-  color: var(--royal-blue);
-  background: white;
-  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.2) 0%, rgba(72, 219, 251, 0.2) 100%);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 30px rgba(233, 69, 96, 0.4);
 }
 
 .tab-button.active::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: var(--royal-gold);
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple), var(--accent-cyan));
+  animation: slideGradient 3s ease infinite;
+}
+
+@keyframes slideGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .content-area {
-  background: white;
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg);
-  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 3rem;
   min-height: 600px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.content-area::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {
