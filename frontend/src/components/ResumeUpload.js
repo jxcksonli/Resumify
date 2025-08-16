@@ -62,7 +62,7 @@ const ResumeUpload = ({ onResumeDataExtracted }) => {
       formData.append('resume', file);
 
       // Send to backend for parsing
-      const response = await fetch('http://localhost:5000/api/parse-resume', {
+      const response = await fetch('http://localhost:5001/api/parse-resume', {
         method: 'POST',
         body: formData,
       });
@@ -92,7 +92,7 @@ const ResumeUpload = ({ onResumeDataExtracted }) => {
       let errorMessage = 'Unable to read document. Please try again or fill manually.';
       
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        errorMessage = 'Cannot connect to backend server. Please ensure the backend is running on port 5000.';
+        errorMessage = 'Cannot connect to backend server. Please ensure the backend is running on port 5001.';
       } else if (error.message && !error.message.includes('not found') && !error.message.includes('404')) {
         errorMessage = error.message;
       }

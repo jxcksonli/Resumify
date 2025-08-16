@@ -34,7 +34,10 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
 
   const addEducationDetail = (eduIndex) => {
     const newEducation = [...resumeData.education];
-    newEducation[eduIndex].details = [...(newEducation[eduIndex].details || []), ''];
+    if (!Array.isArray(newEducation[eduIndex].details)) {
+      newEducation[eduIndex].details = [];
+    }
+    newEducation[eduIndex].details = [...newEducation[eduIndex].details, ''];
     setResumeData(prev => ({ ...prev, education: newEducation }));
   };
 
@@ -72,7 +75,10 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
 
   const addExperienceDetail = (expIndex) => {
     const newExperience = [...resumeData.experience];
-    newExperience[expIndex].details = [...(newExperience[expIndex].details || []), ''];
+    if (!Array.isArray(newExperience[expIndex].details)) {
+      newExperience[expIndex].details = [];
+    }
+    newExperience[expIndex].details = [...newExperience[expIndex].details, ''];
     setResumeData(prev => ({ ...prev, experience: newExperience }));
   };
 
@@ -130,7 +136,10 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
 
   const addProjectDetail = (projIndex) => {
     const newProjects = [...resumeData.projects];
-    newProjects[projIndex].details = [...(newProjects[projIndex].details || []), ''];
+    if (!Array.isArray(newProjects[projIndex].details)) {
+      newProjects[projIndex].details = [];
+    }
+    newProjects[projIndex].details = [...newProjects[projIndex].details, ''];
     setResumeData(prev => ({ ...prev, projects: newProjects }));
   };
 
@@ -267,7 +276,7 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
             </div>
             <div className="details-section">
               <label>Details (GPA, Awards, Coursework)</label>
-              {edu.details?.map((detail, detailIndex) => (
+              {(edu.details && Array.isArray(edu.details) ? edu.details : []).map((detail, detailIndex) => (
                 <div key={detailIndex} className="detail-input">
                   <input
                     type="text"
@@ -347,7 +356,7 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
             </div>
             <div className="details-section">
               <label>Responsibilities & Achievements</label>
-              {exp.details?.map((detail, detailIndex) => (
+              {(exp.details && Array.isArray(exp.details) ? exp.details : []).map((detail, detailIndex) => (
                 <div key={detailIndex} className="detail-input">
                   <textarea
                     value={detail}
@@ -418,7 +427,7 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
             </div>
             <div className="details-section">
               <label>Project Details</label>
-              {proj.details?.map((detail, detailIndex) => (
+              {(proj.details && Array.isArray(proj.details) ? proj.details : []).map((detail, detailIndex) => (
                 <div key={detailIndex} className="detail-input">
                   <textarea
                     value={detail}

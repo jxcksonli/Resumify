@@ -9,7 +9,7 @@ const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -83,7 +83,7 @@ const extractEducation = (text) => {
     degree: '',
     location: '',
     dates: '',
-    details: ''
+    details: []
   }];
 };
 
@@ -135,7 +135,7 @@ const extractExperience = (text) => {
     company: '',
     location: '',
     dates: '',
-    details: ''
+    details: []
   }];
 };
 
@@ -214,7 +214,7 @@ const parseResumeText = (text) => {
       name: '',
       technologies: '',
       dates: '',
-      details: ''
+      details: []
     }],
     achievements: ['']
   };

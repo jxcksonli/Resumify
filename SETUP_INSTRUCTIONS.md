@@ -47,7 +47,7 @@ npm run dev
 ```
 
 This will start:
-- Backend server on http://localhost:5000
+- Backend server on http://localhost:5001
 - Frontend development server on http://localhost:3000
 
 ### Option 2: Run Separately
@@ -101,7 +101,7 @@ If PDF compilation fails:
 ### Port Already in Use
 
 If you get a "port already in use" error:
-- Backend: Change the port in `backend/server.js` (line 10)
+- Backend: Change the port in `backend/server.js` (line 12)
 - Frontend: The React app will prompt you to use a different port
 
 ### Dependencies Installation Issues
@@ -117,7 +117,7 @@ If npm install fails in PowerShell:
 
 ## Development
 
-- Backend API runs on port 5000
+- Backend API runs on port 5001
 - Frontend React app runs on port 3000
 - Frontend is configured to proxy API requests to the backend
 
