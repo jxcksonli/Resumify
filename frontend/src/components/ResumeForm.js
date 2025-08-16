@@ -44,6 +44,12 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
     setResumeData(prev => ({ ...prev, education: newEducation }));
   };
 
+  const removeEducationDetail = (eduIndex, detailIndex) => {
+    const newEducation = [...resumeData.education];
+    newEducation[eduIndex].details = newEducation[eduIndex].details.filter((_, i) => i !== detailIndex);
+    setResumeData(prev => ({ ...prev, education: newEducation }));
+  };
+
   const addExperience = () => {
     setResumeData(prev => ({
       ...prev,
@@ -73,6 +79,12 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
   const updateExperienceDetail = (expIndex, detailIndex, value) => {
     const newExperience = [...resumeData.experience];
     newExperience[expIndex].details[detailIndex] = value;
+    setResumeData(prev => ({ ...prev, experience: newExperience }));
+  };
+
+  const removeExperienceDetail = (expIndex, detailIndex) => {
+    const newExperience = [...resumeData.experience];
+    newExperience[expIndex].details = newExperience[expIndex].details.filter((_, i) => i !== detailIndex);
     setResumeData(prev => ({ ...prev, experience: newExperience }));
   };
 
@@ -125,6 +137,12 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
   const updateProjectDetail = (projIndex, detailIndex, value) => {
     const newProjects = [...resumeData.projects];
     newProjects[projIndex].details[detailIndex] = value;
+    setResumeData(prev => ({ ...prev, projects: newProjects }));
+  };
+
+  const removeProjectDetail = (projIndex, detailIndex) => {
+    const newProjects = [...resumeData.projects];
+    newProjects[projIndex].details = newProjects[projIndex].details.filter((_, i) => i !== detailIndex);
     setResumeData(prev => ({ ...prev, projects: newProjects }));
   };
 
@@ -257,6 +275,13 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
                     onChange={(e) => updateEducationDetail(index, detailIndex, e.target.value)}
                     placeholder="e.g., GPA: 3.8/4.0"
                   />
+                  <button 
+                    className="remove-detail-button" 
+                    onClick={() => removeEducationDetail(index, detailIndex)}
+                    type="button"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               ))}
               <button className="add-detail-button" onClick={() => addEducationDetail(index)}>
@@ -328,8 +353,15 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
                     value={detail}
                     onChange={(e) => updateExperienceDetail(index, detailIndex, e.target.value)}
                     placeholder="Describe your responsibility or achievement"
-                    rows="2"
+                    rows="1"
                   />
+                  <button 
+                    className="remove-detail-button" 
+                    onClick={() => removeExperienceDetail(index, detailIndex)}
+                    type="button"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               ))}
               <button className="add-detail-button" onClick={() => addExperienceDetail(index)}>
@@ -392,8 +424,15 @@ const ResumeForm = ({ resumeData, setResumeData }) => {
                     value={detail}
                     onChange={(e) => updateProjectDetail(index, detailIndex, e.target.value)}
                     placeholder="Describe what you built or achieved"
-                    rows="2"
+                    rows="1"
                   />
+                  <button 
+                    className="remove-detail-button" 
+                    onClick={() => removeProjectDetail(index, detailIndex)}
+                    type="button"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               ))}
               <button className="add-detail-button" onClick={() => addProjectDetail(index)}>

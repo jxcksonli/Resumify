@@ -406,3 +406,110 @@
     padding: 2rem 1rem;
   }
 }
+
+/* Detail Input Styles */
+.detail-input {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-input input,
+.detail-input textarea {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: var(--glass-light);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 212, 255, 0.2);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.detail-input textarea {
+  line-height: 1.4;
+}
+
+.detail-input input:focus,
+.detail-input textarea:focus {
+  outline: none;
+  border-color: var(--aqua-primary);
+  background: var(--glass-white);
+  box-shadow: 
+    0 0 0 4px rgba(0, 212, 255, 0.1),
+    0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.detail-input input::placeholder,
+.detail-input textarea::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+.remove-detail-button {
+  background: var(--glass-white);
+  color: #ff4757;
+  border: 2px solid rgba(255, 71, 87, 0.3);
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.remove-detail-button:hover {
+  background: rgba(255, 71, 87, 0.1);
+  border-color: #ff4757;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
+}
+
+.add-detail-button {
+  background: var(--glass-white);
+  color: var(--aqua-primary);
+  border: 2px solid var(--aqua-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-detail-button:hover {
+  background: linear-gradient(135deg, var(--aqua-primary) 0%, var(--azure-primary) 100%);
+  color: white;
+  transform: translateY(-2px);
+  border-color: transparent;
+  box-shadow: 
+    0 6px 25px rgba(0, 212, 255, 0.3),
+    0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.details-section {
+  margin-top: 1rem;
+}
+
+.details-section label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
